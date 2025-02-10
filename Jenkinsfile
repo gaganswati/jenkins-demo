@@ -13,7 +13,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                checkout scm
+               git 'https://github.com/gaganswati/jenkins-demo.git'
             }
         }
 
