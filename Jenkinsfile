@@ -6,7 +6,7 @@ pipeline {
         AWS_REGION = 'us-west-2'         // Adjust the AWS region
         ECR_REPOSITORY = 'my-php-app' // Your ECR repository name
         IMAGE_TAG = "${env.BUILD_ID}"    // Image tag (e.g., Jenkins build ID)
-        AWS_ACCOUNT_ID = '381492277936'
+        AWS_ACCOUNT_ID = '381492277936'  // aws account
         AWS_CREDENTIALS = 'aws-credentials' // Jenkins AWS credentials
     }
 
