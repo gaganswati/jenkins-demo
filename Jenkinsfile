@@ -59,7 +59,7 @@ pipeline {
                     // Trigger ECS deployment (optional based on your setup)
                     // You may use AWS CLI, ECS SDK, or other tools for this
                     sh '''
-                        aws ecs update-service --cluster php-app-clusteer --service php-01-service --force-new-deployment --region $AWS_REGION
+                        aws ecs update-service --cluster php-app-cluster --service php-01-service --force-new-deployment --region $AWS_REGION
                     '''
                 }
             }
