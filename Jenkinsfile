@@ -5,6 +5,7 @@ pipeline {
         // AWS ECR details
         AWS_REGION = 'us-west-2'         // Adjust the AWS region
         ECR_REPOSITORY = 'phpfirst_image' // Your ECR repository name
+        $EKS_CLUSTER_NAME = 'first_eks_cluster'
         IMAGE_TAG = "${env.BUILD_ID}"    // Image tag (e.g., Jenkins build ID)
         AWS_ACCOUNT_ID = '149536456261'  // aws account
         AWS_CREDENTIALS = 'aws-credentials' // Jenkins AWS credentials
@@ -53,13 +54,13 @@ pipeline {
             }
         }
 
-        stage('Deploy to ECS') {
+        stage('Deploy to EkS') {
             steps {
                 script {
-                    // Trigger ECS deployment (optional based on your setup)
-                    // You may use AWS CLI, ECS SDK, or other tools for this
+                   
                     sh '''
-                        aws ecs update-service --cluster php-app-cluster --service php-01-service --force-new-deployment --region $AWS_REGION
+                        aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
+                        kubectl set image deployment/my-php-app my-php-app=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
                     '''
                 }
             }
