@@ -4,7 +4,7 @@ pipeline {
     environment {
         // AWS ECR details
         AWS_REGION = 'us-east-1'         // Adjust the AWS region
-        ECR_REPOSITORY = 'phpfirst_image' // Your ECR repository name
+        ECR_REPOSITORY = 'php-app' // Your ECR repository name
         $EKS_CLUSTER_NAME = 'first_eks_cluster'
         IMAGE_TAG = "${env.BUILD_ID}"    // Image tag (e.g., Jenkins build ID)
         AWS_ACCOUNT_ID = '149536456261'  // aws account
