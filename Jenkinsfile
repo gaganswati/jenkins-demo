@@ -1,68 +1,40 @@
 pipeline {
     agent any
-
     environment {
-        // AWS ECR details
-        AWS_REGION = 'us-east-1'         // Adjust the AWS region
-        ECR_REPOSITORY = 'php-app' // Your ECR repository name
-        EKS_CLUSTER_NAME = 'first_eks_cluster'
-        IMAGE_TAG = "${env.BUILD_ID}"    // Image tag (e.g., Jenkins build ID)
-        AWS_ACCOUNT_ID = '149536456261'  // aws account
-        AWS_CREDENTIALS = 'aws-credentials' // Jenkins AWS credentials
+        ACR_NAME = 'phpacr'
+        IMAGE_NAME = 'php-app'
+        IMAGE_TAG = 'v1'
+        ACR_URL = "${ACR_NAME}.azurecr.io"
+        RESOURCE_GROUP = 'php-app-rg'
+        AKS_CLUSTER = 'phpaks'
     }
 
     stages {
         stage('Checkout') {
             steps {
-               git url: 'https://github.com/gaganswati/jenkins-demo.git' , branch: 'main'
+                git 'https://your-repo-url.com/php-app.git'
             }
         }
 
         stage('Build Docker Image') {
             steps {
-                script {
-                    // Build Docker image for the PHP application
-                    sh '''
-                        docker build -t $ECR_REPOSITORY:$IMAGE_TAG .
-                    '''
-                }
+                sh 'docker build -t $IMAGE_NAME .'
+                sh 'docker tag $IMAGE_NAME $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
             }
         }
 
-        stage('Login to ECR') {
+        stage('Push to ACR') {
             steps {
-                script {
-                    // Login to ECR using AWS CLI
-                    withCredentials([[$class: 'AmazonWebServicesCredentialsBinding', credentialsId: "$AWS_CREDENTIALS"]]) {
-                        sh '''
-                            aws ecr get-login-password --region $AWS_REGION | docker login --username AWS --password-stdin $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com
-                        '''
-                    }
-                }
+                sh "az acr login --name $ACR_NAME"
+                sh 'docker push $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
             }
         }
 
-        stage('Push Docker Image to ECR') {
+        stage('Deploy to AKS') {
             steps {
-                script {
-                    // Tag the image with the ECR repository URI and push it
-                    sh '''
-                        docker tag $ECR_REPOSITORY:$IMAGE_TAG $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
-                        docker push $AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:$IMAGE_TAG
-                    '''
-                }
-            }
-        }
-
-        stage('Deploy to EkS') {
-            steps {
-                script {
-                   
-                    sh '''
-                        aws eks --region $AWS_REGION update-kubeconfig --name $EKS_CLUSTER_NAME
-                        kubectl set image deployment/my-php-app my-php-app=$AWS_ACCOUNT_ID.dkr.ecr.$AWS_REGION.amazonaws.com/$ECR_REPOSITORY:latest
-                    '''
-                }
+                sh "az aks get-credentials --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER"
+                sh 'kubectl apply -f k8s/php-deployment.yaml'
+                sh 'kubectl apply -f k8s/php-service.yaml'
             }
         }
     }
