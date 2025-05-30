@@ -1,9 +1,9 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: php-app-deployment
+  name: php-app
 spec:
-  replicas: 2
+  replicas: 1
   selector:
     matchLabels:
       app: php-app
@@ -13,20 +13,7 @@ spec:
         app: php-app
     spec:
       containers:
-        - name: php-app
-          image: 149536456261.dkr.ecr.us-east-1.amazonaws.com/php-app:latest
-          ports:
-            - containerPort: 80
----
-apiVersion: v1
-kind: Service
-metadata:
-  name: php-app-service
-spec:
-  selector:
-    app: php-app
-  ports:
-    - protocol: TCP
-      port: 80
-      targetPort: 80
-  type: LoadBalancer
+      - name: php-container
+        image: phpacr.azurecr.io/php-app:v1
+        ports:
+        - containerPort: 80
