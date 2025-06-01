@@ -1,7 +1,7 @@
 pipeline {
     agent any
     environment {
-        ACR_NAME = 'myacr'
+        ACR_NAME = 'myphpacr'
         IMAGE_NAME = 'php-app'
         IMAGE_TAG = 'v1'
         ACR_URL = "${ACR_NAME}.azurecr.io"
