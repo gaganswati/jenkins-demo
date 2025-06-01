@@ -1,18 +1,18 @@
 pipeline {
     agent any
     environment {
-        ACR_NAME = 'phpacr'
+        ACR_NAME = 'myacr'
         IMAGE_NAME = 'php-app'
         IMAGE_TAG = 'v1'
         ACR_URL = "${ACR_NAME}.azurecr.io"
-        RESOURCE_GROUP = 'php-app-rg'
-        AKS_CLUSTER = 'phpaks'
+        RESOURCE_GROUP = 'myResourceGroup '
+        AKS_CLUSTER = 'myAKSCluster'
     }
 
     stages {
         stage('Checkout') {
             steps {
-                git 'https://your-repo-url.com/php-app.git'
+                git 'https://github.com/gaganswati/jenkins-demo.git'
             }
         }
 
@@ -33,8 +33,8 @@ pipeline {
         stage('Deploy to AKS') {
             steps {
                 sh "az aks get-credentials --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER"
-                sh 'kubectl apply -f k8s/php-deployment.yaml'
-                sh 'kubectl apply -f k8s/php-service.yaml'
+                sh 'kubectl apply -f deployment.yaml'
+                sh 'kubectl apply -f service.yaml'
             }
         }
     }
