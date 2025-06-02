@@ -18,6 +18,7 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                sh 'export DOCKER_BUILDKIT=1'
                 sh 'docker build -t $IMAGE_NAME .'
                 sh 'docker tag $IMAGE_NAME $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
             }
