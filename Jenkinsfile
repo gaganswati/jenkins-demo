@@ -7,6 +7,7 @@ pipeline {
         ACR_URL = "${ACR_NAME}.azurecr.io"
         RESOURCE_GROUP = 'myResourceGroup '
         AKS_CLUSTER = 'myAKSCluster'
+        GIT_CREDENTIALS = credentials('GitAuthToken')
     }
 
     stages {
