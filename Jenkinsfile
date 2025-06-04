@@ -13,7 +13,9 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                 git branch: 'main', credentialsId: 'GitAuthToken', url: 'https://github.com/gaganswati/jenkins-demo.git'
+                 git branch: 'main', 
+                     credentialsId: 'GitAuthToken',
+                     url: 'https://github.com/gaganswati/jenkins-demo.git'
             }
         }
 
