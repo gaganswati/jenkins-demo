@@ -1,5 +1,6 @@
 pipeline {
     agent any
+    docker { image 'jenkins/inbound-agent' }
     environment {
         ACR_NAME = 'myphpacr'
         IMAGE_NAME = 'php-app'
