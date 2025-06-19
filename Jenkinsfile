@@ -20,33 +20,32 @@ pipeline {
                      url: 'https://github.com/gaganswati/jenkins-demo.git'
             }
         }
-
         stage('Build Docker Image') {
             steps {
                  withEnv([
                      "PATH+EXTRA=/usr/local/bin:/bin:/usr/bin",
                      "DOCKER_BUILDKIT=1"
-                ])
-                {
-                sh 'export DOCKER_BUILDKIT=1'
-                sh 'docker build -t $IMAGE_NAME .'
-                sh 'docker tag $IMAGE_NAME $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
+                ]){
+                    sh 'docker build -t $IMAGE_NAME .'
+                    sh 'docker tag $IMAGE_NAME $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
                 }    
             }
         }
-
         stage('Push to ACR') {
             steps {
-                sh "az acr login --name $ACR_NAME"
-                sh 'bash -c "docker push $ACR_URL/$IMAGE_NAME:$IMAGE_TAG"'
+                withEnv(["PATH+EXTRA=/usr/local/bin:/bin:/usr/bin"]) {
+                    sh 'az acr login --name ${ACR_NAME}'
+                    sh 'docker push ${ACR_URL}/${IMAGE_NAME}:${IMAGE_TAG}'
+                }
             }
         }
-
         stage('Deploy to AKS') {
             steps {
-                sh "az aks get-credentials --resource-group $RESOURCE_GROUP --name $AKS_CLUSTER"
-                sh 'kubectl apply -f deployment.yaml'
-                sh 'kubectl apply -f service.yaml'
+                withEnv(["PATH+EXTRA=/usr/local/bin:/bin:/usr/bin"]) {
+                    sh 'az aks get-credentials --resource-group ${RESOURCE_GROUP} --name ${AKS_CLUSTER}'
+                    sh 'kubectl apply -f deployment.yaml'
+                    sh 'kubectl apply -f service.yaml'
+                }
             }
         }
     }
