@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Push to ACR') {
             steps {
-                   withEnv(['PATH+AZURE=/path/to/azure-cli/bin']){
+                   withEnv(['PATH+AZURE=/usr/local/bin:/bin:/usr/bin']){
                     sh '''
                         az acr login --name ${ACR_NAME}
                         docker push ${ACR_URL}/${IMAGE_NAME}:${IMAGE_TAG}
@@ -43,7 +43,7 @@ pipeline {
           }
         stage('Deploy to AKS') {
             steps {
-                withEnv(['PATH+AZURE=/path/to/azure-cli/bin']) {
+                withEnv(['PATH+AZURE=/usr/local/bin:/bin:/usr/bin']) {
                     sh 'az aks get-credentials --resource-group ${RESOURCE_GROUP} --name ${AKS_CLUSTER}'
                     sh 'kubectl apply -f deployment.yaml'
                     sh 'kubectl apply -f service.yaml'
