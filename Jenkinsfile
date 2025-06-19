@@ -5,10 +5,11 @@ pipeline {
         IMAGE_NAME = 'php-app'
         IMAGE_TAG = 'v1'
         ACR_URL = "${ACR_NAME}.azurecr.io"
-        RESOURCE_GROUP = 'myResourceGroup '
+        RESOURCE_GROUP = 'myResourceGroup'
         AKS_CLUSTER = 'myAKSCluster'
         GIT_CREDENTIALS = credentials('GitAuthToken')
         PATH = '/usr/local/bin:$PATH'
+        SHELL = '/bin/bash'
     }
 
     stages {
