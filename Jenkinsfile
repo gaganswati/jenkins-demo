@@ -22,9 +22,15 @@ pipeline {
 
         stage('Build Docker Image') {
             steps {
+                 withEnv([
+                     "PATH+EXTRA=/usr/local/bin:/bin:/usr/bin",
+                     "DOCKER_BUILDKIT=1"
+                ])
+                {
                 sh 'export DOCKER_BUILDKIT=1'
                 sh 'docker build -t $IMAGE_NAME .'
                 sh 'docker tag $IMAGE_NAME $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
+                }    
             }
         }
 
