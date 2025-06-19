@@ -38,7 +38,7 @@ pipeline {
         stage('Push to ACR') {
             steps {
                 sh "az acr login --name $ACR_NAME"
-                sh 'docker push $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
+                sh(script: 'docker push $ACR_URL/$IMAGE_NAME:$IMAGE_TAG', shell: '/bin/bash')
             }
         }
 
