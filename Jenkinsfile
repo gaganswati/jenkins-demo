@@ -8,6 +8,7 @@ pipeline {
         RESOURCE_GROUP = 'myResourceGroup '
         AKS_CLUSTER = 'myAKSCluster'
         GIT_CREDENTIALS = credentials('GitAuthToken')
+        PATH = '/usr/local/bin:$PATH'
     }
 
     stages {
@@ -22,7 +23,7 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                 sh 'export DOCKER_BUILDKIT=1'
-                sh '/usr/local/bin/docker build -t $IMAGE_NAME .'
+                sh 'docker build -t $IMAGE_NAME .'
                 sh 'docker tag $IMAGE_NAME $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
             }
         }
