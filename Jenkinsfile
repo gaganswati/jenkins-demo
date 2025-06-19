@@ -33,12 +33,14 @@ pipeline {
         }
         stage('Push to ACR') {
             steps {
-                withEnv(["PATH+EXTRA=/usr/local/bin:/bin:/usr/bin"]) {
-                    sh 'az acr login --name ${ACR_NAME}'
-                    sh 'docker push ${ACR_URL}/${IMAGE_NAME}:${IMAGE_TAG}'
+                docker.image('mcr.microsoft.com/azure-cli').inside('-v /var/run/docker.sock:/var/run/docker.sock') {
+                    sh '''
+                        az acr login --name ${ACR_NAME}
+                        docker push ${ACR_URL}/${IMAGE_NAME}:${IMAGE_TAG}
+                    '''
                 }
             }
-        }
+       }
         stage('Deploy to AKS') {
             steps {
                 withEnv(["PATH+EXTRA=/usr/local/bin:/bin:/usr/bin"]) {
