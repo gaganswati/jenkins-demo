@@ -8,7 +8,7 @@ pipeline {
         RESOURCE_GROUP = 'myResourceGroup'
         AKS_CLUSTER = 'myAKSCluster'
         GIT_CREDENTIALS = credentials('GitAuthToken')
-        PATH = '/usr/local/bin:$PATH'
+        PATH = "/usr/local/bin:/usr/bin:/bin:/opt/homebrew/bin:$PATH"
         SHELL = '/bin/bash'
     }
 
@@ -23,7 +23,6 @@ pipeline {
         stage('Build Docker Image') {
             steps {
                  withEnv([
-                     "PATH+EXTRA=/usr/local/bin:/bin:/usr/bin",
                      "DOCKER_BUILDKIT=1"
                 ]){
                     sh 'docker build -t $IMAGE_NAME .'
@@ -33,21 +32,17 @@ pipeline {
         }
         stage('Push to ACR') {
             steps {
-                   withEnv(["PATH=/opt/homebrew/bin:$PATH"]) {
                     sh '''
                         az acr login --name ${ACR_NAME}
                         docker push ${ACR_URL}/${IMAGE_NAME}:${IMAGE_TAG}
                     '''
-                   }    
                }
           }
         stage('Deploy to AKS') {
-            steps {
-                    withEnv(["PATH=/opt/homebrew/bin:$PATH"]) {
+            steps { 
                     sh 'az aks get-credentials --resource-group ${RESOURCE_GROUP} --name ${AKS_CLUSTER}'
                     sh 'kubectl apply -f deployment.yaml'
                     sh 'kubectl apply -f service.yaml'
-                }
             }
         }
     }
