@@ -43,7 +43,7 @@ pipeline {
           }
         stage('Deploy to AKS') {
             steps {
-                withEnv(['PATH+AZURE=/usr/local/bin:/bin:/usr/bin']) {
+                    withEnv(["PATH=/opt/homebrew/bin:$PATH"]) {
                     sh 'az aks get-credentials --resource-group ${RESOURCE_GROUP} --name ${AKS_CLUSTER}'
                     sh 'kubectl apply -f deployment.yaml'
                     sh 'kubectl apply -f service.yaml'
