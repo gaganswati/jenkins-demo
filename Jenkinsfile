@@ -33,7 +33,7 @@ pipeline {
         }
         stage('Push to ACR') {
             steps {
-                   withEnv(['PATH+AZURE=/usr/local/bin:/bin:/usr/bin']){
+                   withEnv(["PATH=/opt/homebrew/bin:$PATH"]) {
                     sh '''
                         az acr login --name ${ACR_NAME}
                         docker push ${ACR_URL}/${IMAGE_NAME}:${IMAGE_TAG}
