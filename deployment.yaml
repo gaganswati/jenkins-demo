@@ -15,5 +15,6 @@ spec:
       containers:
       - name: php-container
         image: myphpacr.azurecr.io/php-app:v1
+        imagePullPolicy: Always
         ports:
         - containerPort: 80
