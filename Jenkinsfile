@@ -2,8 +2,8 @@ pipeline {
     agent any
     environment {
         ACR_NAME = 'myphpacr'
-        IMAGE_NAME = 'php-app-i1'
-        IMAGE_TAG = 'v2'
+        IMAGE_NAME = 'drupal-app'
+        IMAGE_TAG = 'v1'
         ACR_URL = "${ACR_NAME}.azurecr.io"
         RESOURCE_GROUP = 'myResourceGroup'
         AKS_CLUSTER = 'myAKSCluster'
@@ -15,7 +15,7 @@ pipeline {
     stages {
         stage('Checkout') {
             steps {
-                 git branch: 'main', 
+                 git branch: 'stag', 
                      credentialsId: 'GitAuthToken',
                      url: 'https://github.com/gaganswati/jenkins-demo.git'
             }
