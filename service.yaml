@@ -1,10 +1,10 @@
 apiVersion: v1
 kind: Service
 metadata:
-  name: php-service
+  name: drupal-service
 spec:
   selector:
-    app: php-app-i1
+    app: drupal-service
   type: LoadBalancer
   ports:
   - port: 80
