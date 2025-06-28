@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: php-app-i1
+  name: drupal-i1
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: php-app-i1
+      app: drupal-app
   template:
     metadata:
       labels:
-        app: php-app-i1
+        app: drupal-app
     spec:
       containers:
       - name: php-container
-        image: myphpacr.azurecr.io/php-app-i1:v2
+        image: myphpacr.azurecr.io/drupal-app:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 80
