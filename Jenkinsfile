@@ -3,7 +3,7 @@ pipeline {
     environment {
         ACR_NAME = 'myphpacr'
         IMAGE_NAME = 'php-app'
-        IMAGE_TAG = 'v2'
+        IMAGE_TAG = 'v1'
         ACR_URL = "${ACR_NAME}.azurecr.io"
         RESOURCE_GROUP = 'myResourceGroup'
         AKS_CLUSTER = 'myAKSCluster'
