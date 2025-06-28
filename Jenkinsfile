@@ -25,7 +25,7 @@ pipeline {
                  withEnv([
                      "DOCKER_BUILDKIT=1"
                 ]){
-                    sh 'docker build -t $IMAGE_NAME .'
+                    sh 'docker build --platform linux/amd64 -t $IMAGE_NAME .'
                     sh 'docker tag $IMAGE_NAME $ACR_URL/$IMAGE_NAME:$IMAGE_TAG'
                 }    
             }
