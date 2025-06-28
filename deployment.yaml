@@ -1,20 +1,20 @@
 apiVersion: apps/v1
 kind: Deployment
 metadata:
-  name: php-app
+  name: php-app-i
 spec:
   replicas: 1
   selector:
     matchLabels:
-      app: php-app
+      app: php-app-i
   template:
     metadata:
       labels:
-        app: php-app
+        app: php-app-i
     spec:
       containers:
       - name: php-container
-        image: myphpacr.azurecr.io/php-app:v2
+        image: myphpacr.azurecr.io/php-app-i:v1
         imagePullPolicy: Always
         ports:
         - containerPort: 80
