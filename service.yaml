@@ -4,7 +4,7 @@ metadata:
   name: php-service
 spec:
   selector:
-    app: php-app
+    app: php-app-i
   type: LoadBalancer
   ports:
   - port: 80
