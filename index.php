@@ -1,5 +1,5 @@
 <?php
 
-echo "Hello this id php deployment with jenkins";
+echo "Hello this is drupal deployment with jenkins";
 
 ?>
