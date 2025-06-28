@@ -1,9 +1,11 @@
-FROM php:8.1-apache
-# Set the working directory
-WORKDIR /var/www/html
+# Use official Drupal base image
+FROM drupal:10.2-apache
 
-# Copy the current directory contents into the container
-COPY . /var/www/html/
+# Copy your custom modules/themes from GitHub clone
+# Assuming your Drupal project is in ./drupal/ (relative to Dockerfile)
+COPY ./drupal /var/www/html
 
-# Expose port 80 for web traffic
-EXPOSE 80
+# Set correct permissions (optional, adjust as needed)
+RUN chown -R www-data:www-data /var/www/html
+
+# Expose port 80 (already exposed in base image)
